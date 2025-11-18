@@ -14,11 +14,9 @@ fn main() -> Result<()> {
     let mut ct = Conntrack::connect()?;
 
     // Dump conntrack table as a Vec<Flow>
-    let flows = ct.dump()?;
-
-    for flow in flows {
-        log::info!("{flow:?}");
-    }
+    ct.delete(libc::IPPROTO_TCP as u8, ip, true)
+        .map_err(|e| error!("{e}"))
+        .ok();
 
     Ok(())
 }
